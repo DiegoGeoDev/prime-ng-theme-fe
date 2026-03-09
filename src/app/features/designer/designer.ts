@@ -15,7 +15,7 @@ import { ThemeDesignerService } from './services/theme-designer.service';
 import { CreateTheme } from './components/create-theme';
 import { DesignEditor } from './components/editor';
 import { EditorFooter } from './components/editor-footer';
-import { DesignPreview } from './components/preview';
+import { DesignPreview } from './blocks/preview/preview';
 
 @Component({
   selector: 'app-designer',
