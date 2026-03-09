@@ -15,7 +15,6 @@ import { HelpDialog } from './help-dialog';
       <p-button
         icon="pi pi-question-circle"
         severity="secondary"
-        [outlined]="true"
         [rounded]="true"
         (click)="openHelpDialog()"
         title="Documentation"
@@ -24,7 +23,6 @@ import { HelpDialog } from './help-dialog';
         label="Download"
         icon="pi pi-download"
         severity="secondary"
-        [outlined]="true"
         (click)="openDownloadDialog()"
       />
       <p-button label="Apply" icon="pi pi-check" (click)="apply()" />
