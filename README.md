@@ -1,10 +1,6 @@
 # PrimeNG Theme Studio
 
-A visual theme designer for [PrimeNG](https://primeng.org) built with Angular 21. Customize every design token, preview changes in real time, and export production-ready themes — no manual CSS required.
-
-**Live:** [theme-designer.ccl.wtf](https://theme-designer.ccl.wtf)
-
-![Landing Page](docs/landing.png)
+A visual theme designer for [PrimeNG](https://primeng.org) built with Angular 21. Customize every design token, preview changes in real time, and export production-ready themes.
 
 ## Features
 
@@ -14,8 +10,6 @@ A visual theme designer for [PrimeNG](https://primeng.org) built with Angular 21
 - **Dark mode** — Toggle between light and dark to preview both variants
 - **Export** — Download a production-ready TypeScript preset file, or copy a base64 token to share/restore your theme later
 - **Theme switcher** — Quickly change primary and surface palettes, presets, ripple, and RTL from the landing page
-
-![Theme Designer](docs/designer.png)
 
 ## Tech Stack
 
@@ -50,7 +44,6 @@ src/app/
     designer/         # Theme designer with split-pane editor + live preview
       components/     # Editor tabs (primitive, semantic, component, settings, custom)
       services/       # ThemeDesignerService — central state and export logic
-    blocks/           # UI block showcase (WIP, routes deactivated)
 ```
 
 ## How It Works
@@ -59,7 +52,3 @@ src/app/
 2. **Edit tokens** — Use the tabbed editor to adjust primitive colors, border radii, semantic mappings, component-level overrides, or add custom tokens
 3. **Preview live** — The right panel renders real PrimeNG components with your current theme applied
 4. **Export** — Download a `.ts` preset file ready to drop into `providePrimeNG({ theme: { preset: yourTheme } })`, or copy the base64 token to restore later
-
-## License
-
-Open source. Made by [ccl](https://github.com/ccl) with love.
