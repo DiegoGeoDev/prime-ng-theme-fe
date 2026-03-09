@@ -6,8 +6,8 @@ export const blocksRoutes: Routes = [
     loadComponent: () => import('./blocks').then((m) => m.Blocks),
   },
   // TODO: re-enable when block preview iframe work resumes
-  // {
-  //   path: 'preview/:id',
-  //   loadComponent: () => import('./components/block-preview').then((m) => m.BlockPreview),
-  // },
+  {
+    path: 'preview/:id',
+    loadComponent: () => import('./components/block-preview').then((m) => m.BlockPreview),
+  },
 ];
