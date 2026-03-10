@@ -1,51 +1,24 @@
 <div class="flex h-full overflow-hidden text-sm">
   <!-- ===== SIDEBAR ===== -->
-  <aside class="w-56 shrink-0 border-r border-surface flex flex-col overflow-y-auto">
+  <aside class="w-56 shrink-0 border-r border-surface flex flex-col overflow-y-auto bg-surface-0 dark:bg-surface-900">
     <!-- Company header -->
-    <div class="flex items-center justify-between px-4 py-3 border-b border-surface">
-      <div class="flex items-center gap-2">
-        <div
-          class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center shrink-0"
-        >
-          <div class="w-2 h-2 rounded-full bg-primary"></div>
-        </div>
-        <span class="font-semibold text-sm">Acme Florestal</span>
-      </div>
-      <p-button
-        icon="pi pi-pencil"
-        severity="secondary"
-        variant="text"
-        size="small"
-        [rounded]="true"
-      />
-    </div>
-
-    <!-- Quick create -->
-    <div class="px-3 py-2 border-b border-surface">
-      <p-button
-        label="Novo Registro"
-        icon="pi pi-plus"
-        severity="secondary"
-        variant="outlined"
-        size="small"
-        [fluid]="true"
-      />
+    <div class="p-4">
+      <img src="logo.svg" alt="EVODATA" class="h-6 dark:invert-100" />
     </div>
 
     <!-- Main navigation -->
     <nav class="flex-1 px-2 py-2 flex flex-col gap-0.5">
       @for (item of navItems(); track item.label) {
-        <button
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors text-left"
-          [class]="
-            item.active
-              ? 'bg-primary text-primary-contrast-color font-medium'
-              : 'text-color hover:bg-highlight'
-          "
-        >
-          <i [class]="item.icon + ' text-xs'"></i>
-          {{ item.label }}
-        </button>
+        <p-button
+          [label]="item.label"
+          size="small"
+          variant="text"
+          [severity]="item.active ? 'primary' : 'secondary'"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          [icon]="item.icon"
+        />
       }
 
       <div class="mt-4 mb-1 px-3">
@@ -53,46 +26,61 @@
       </div>
 
       @for (item of florestNavItems(); track item.label) {
-        <button
-          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors text-left"
-          [class]="
-            item.active ? 'bg-highlight-subtle font-medium' : 'text-color hover:bg-highlight'
-          "
-        >
-          <i [class]="item.icon + ' text-xs'"></i>
-          {{ item.label }}
-        </button>
+        <p-button
+          [label]="item.label"
+          size="small"
+          variant="text"
+          [severity]="item.active ? 'primary' : 'secondary'"
+          fluid="true"
+          type="button"
+          styleClass="justify-start!"
+          [icon]="item.icon"
+        />
       }
     </nav>
 
     <!-- Bottom settings -->
     <div class="px-2 py-1 border-t border-surface flex flex-col gap-0.5">
-      <button
-        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
-      >
-        <i class="pi pi-cog text-xs"></i>
-        Configurações
-      </button>
-      <button
-        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
-      >
-        <i class="pi pi-question-circle text-xs"></i>
-        Ajuda
-      </button>
-      <button
-        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
-      >
-        <i class="pi pi-search text-xs"></i>
-        Pesquisar
-      </button>
+      <p-button
+        label="Configurações"
+        size="small"
+        variant="text"
+        severity="secondary"
+        fluid="true"
+        type="button"
+        styleClass="justify-start!"
+        icon="pi pi-cog text-xs"
+      />
+
+      <p-button
+        label="Ajuda"
+        size="small"
+        variant="text"
+        severity="secondary"
+        fluid="true"
+        type="button"
+        styleClass="justify-start!"
+        icon="pi pi-cog"
+      />
+
+      <p-button
+        label="Pesquisar"
+        size="small"
+        variant="text"
+        severity="secondary"
+        fluid="true"
+        type="button"
+        styleClass="justify-start!"
+        icon="pi pi-search"
+      />
     </div>
 
     <!-- User footer -->
     <div class="border-t border-surface px-4 py-3 flex items-center gap-2">
-      <p-avatar label="MS" shape="circle" />
+      <p-avatar label="R" shape="circle" />
       <div class="flex-1 min-w-0">
-        <div class="text-xs font-medium truncate">Maria Silva</div>
-        <div class="text-xs text-muted-color truncate">m.silva&#64;acme.com.br</div>
+        <div class="text-xs font-medium truncate">Rowan Atkinson</div>
+        <div class="text-xs text-muted-color truncate">mr.bean&#64;evodata.com.br</div>
       </div>
       <p-button
         icon="pi pi-ellipsis-v"
@@ -118,6 +106,7 @@
         />
         <h1 class="text-base font-semibold">Cadastro Florestal</h1>
       </div>
+
       <p-button
         label="GitHub"
         icon="pi pi-github"
@@ -138,7 +127,9 @@
                 <span class="text-xs text-muted-color font-medium">{{ card.label }}</span>
                 <span
                   class="text-xs font-semibold flex items-center gap-0.5"
-                  [class]="card.trend === 'up' ? 'text-green-700 dark:text-green-500' : 'text-red-700'"
+                  [class]="
+                    card.trend === 'up' ? 'text-green-700 dark:text-green-500' : 'text-red-700'
+                  "
                 >
                   <i
                     [class]="
@@ -160,9 +151,7 @@
                       card.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-right'
                     "
                     style="font-size: 0.65rem"
-                    [style.color]="
-                      card.trend === 'up' ? 'var(--p-green-500)' : 'var(--p-red-500)'
-                    "
+                    [style.color]="card.trend === 'up' ? 'var(--p-green-500)' : 'var(--p-red-500)'"
                   ></i>
                   {{ card.description }}
                 </div>
