@@ -3,6 +3,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { Button } from 'primeng/button';
 import { DesignPreview } from '../preview/preview';
 import { LoginBlock } from '../login/login';
+import { DashboardBlock } from '../dashboard/dashboard';
 
 export interface BlockOption {
   id: string;
@@ -22,6 +23,7 @@ export class Grid {
   protected readonly blocks = signal<BlockOption[]>([
     { id: 'preview', label: 'Preview', icon: 'pi pi-eye', component: DesignPreview },
     { id: 'login', label: 'Login', icon: 'pi pi-sign-in', component: LoginBlock },
+    { id: 'dashboard', label: 'Dashboard', icon: 'pi pi-th-large', component: DashboardBlock },
   ]);
 
   protected readonly selectedBlockId = signal<string>('preview');

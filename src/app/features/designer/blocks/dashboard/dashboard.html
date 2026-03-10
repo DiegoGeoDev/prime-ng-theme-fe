@@ -1,0 +1,535 @@
+<div class="flex h-full overflow-hidden text-sm">
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="w-56 shrink-0 border-r border-surface flex flex-col overflow-y-auto">
+    <!-- Company header -->
+    <div class="flex items-center justify-between px-4 py-3 border-b border-surface">
+      <div class="flex items-center gap-2">
+        <div
+          class="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center shrink-0"
+        >
+          <div class="w-2 h-2 rounded-full bg-primary"></div>
+        </div>
+        <span class="font-semibold text-sm">Acme Florestal</span>
+      </div>
+      <p-button
+        icon="pi pi-pencil"
+        severity="secondary"
+        variant="text"
+        size="small"
+        [rounded]="true"
+      />
+    </div>
+
+    <!-- Quick create -->
+    <div class="px-3 py-2 border-b border-surface">
+      <p-button
+        label="Novo Registro"
+        icon="pi pi-plus"
+        severity="secondary"
+        variant="outlined"
+        size="small"
+        [fluid]="true"
+      />
+    </div>
+
+    <!-- Main navigation -->
+    <nav class="flex-1 px-2 py-2 flex flex-col gap-0.5">
+      @for (item of navItems(); track item.label) {
+        <button
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors text-left"
+          [class]="
+            item.active
+              ? 'bg-primary text-primary-contrast-color font-medium'
+              : 'text-color hover:bg-highlight'
+          "
+        >
+          <i [class]="item.icon + ' text-xs'"></i>
+          {{ item.label }}
+        </button>
+      }
+
+      <div class="mt-4 mb-1 px-3">
+        <span class="text-xs font-medium text-muted-color uppercase tracking-wider">Florestal</span>
+      </div>
+
+      @for (item of florestNavItems(); track item.label) {
+        <button
+          class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm transition-colors text-left"
+          [class]="
+            item.active ? 'bg-highlight-subtle font-medium' : 'text-color hover:bg-highlight'
+          "
+        >
+          <i [class]="item.icon + ' text-xs'"></i>
+          {{ item.label }}
+        </button>
+      }
+    </nav>
+
+    <!-- Bottom settings -->
+    <div class="px-2 py-1 border-t border-surface flex flex-col gap-0.5">
+      <button
+        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
+      >
+        <i class="pi pi-cog text-xs"></i>
+        Configurações
+      </button>
+      <button
+        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
+      >
+        <i class="pi pi-question-circle text-xs"></i>
+        Ajuda
+      </button>
+      <button
+        class="w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-sm hover:bg-highlight transition-colors text-left"
+      >
+        <i class="pi pi-search text-xs"></i>
+        Pesquisar
+      </button>
+    </div>
+
+    <!-- User footer -->
+    <div class="border-t border-surface px-4 py-3 flex items-center gap-2">
+      <p-avatar label="MS" shape="circle" />
+      <div class="flex-1 min-w-0">
+        <div class="text-xs font-medium truncate">Maria Silva</div>
+        <div class="text-xs text-muted-color truncate">m.silva&#64;acme.com.br</div>
+      </div>
+      <p-button
+        icon="pi pi-ellipsis-v"
+        severity="secondary"
+        variant="text"
+        size="small"
+        [rounded]="true"
+      />
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+    <!-- Header -->
+    <header class="flex items-center justify-between px-6 py-4 border-b border-surface shrink-0">
+      <div class="flex items-center gap-3">
+        <p-button
+          icon="pi pi-bars"
+          severity="secondary"
+          variant="text"
+          size="small"
+          [rounded]="true"
+        />
+        <h1 class="text-base font-semibold">Cadastro Florestal</h1>
+      </div>
+      <p-button
+        label="GitHub"
+        icon="pi pi-github"
+        severity="secondary"
+        variant="outlined"
+        size="small"
+      />
+    </header>
+
+    <!-- Scrollable content -->
+    <div class="flex-1 overflow-auto p-6 flex flex-col gap-5">
+      <!-- KPI CARDS -->
+      <div class="grid grid-cols-4 gap-4">
+        @for (card of kpiCards(); track card.label) {
+          <p-card class="border! border-surface!">
+            <ng-template #header>
+              <div class="flex items-start justify-between gap-2 px-4 pt-4">
+                <span class="text-xs text-muted-color font-medium">{{ card.label }}</span>
+                <span
+                  class="text-xs font-semibold flex items-center gap-0.5"
+                  [class]="card.trend === 'up' ? 'text-green-700 dark:text-green-500' : 'text-red-700'"
+                >
+                  <i
+                    [class]="
+                      card.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-right'
+                    "
+                    style="font-size: 0.65rem"
+                  ></i>
+                  {{ card.change }}
+                </span>
+              </div>
+            </ng-template>
+
+            <ng-template #content>
+              <div class="flex flex-col gap-1.5 -mt-2">
+                <div class="text-xl font-bold text-color">{{ card.value }}</div>
+                <div class="text-xs text-muted-color flex items-center gap-1">
+                  <i
+                    [class]="
+                      card.trend === 'up' ? 'pi pi-arrow-up-right' : 'pi pi-arrow-down-right'
+                    "
+                    style="font-size: 0.65rem"
+                    [style.color]="
+                      card.trend === 'up' ? 'var(--p-green-500)' : 'var(--p-red-500)'
+                    "
+                  ></i>
+                  {{ card.description }}
+                </div>
+              </div>
+            </ng-template>
+          </p-card>
+        }
+      </div>
+
+      <!-- CHART CARD -->
+      <div class="border border-surface rounded-xl bg-surface-0 overflow-hidden">
+        <div class="flex items-center justify-between px-5 pt-4 pb-3 flex-wrap gap-3">
+          <div>
+            <h2 class="font-semibold text-sm">Volume de Madeira</h2>
+            <p class="text-xs text-muted-color mt-0.5">Total acumulado nos últimos 3 meses</p>
+          </div>
+          <div class="flex gap-1.5 flex-wrap">
+            <p-button label="Últimos 3 meses" size="small" />
+            <p-button
+              label="Últimos 30 dias"
+              size="small"
+              severity="secondary"
+              variant="outlined"
+            />
+            <p-button label="Últimos 7 dias" size="small" severity="secondary" variant="outlined" />
+          </div>
+        </div>
+
+        <!-- Inline SVG area chart — no external chart library required -->
+        <svg
+          viewBox="0 0 820 155"
+          class="w-full block"
+          xmlns="http://www.w3.org/2000/svg"
+          aria-label="Gráfico de volume de madeira (m³/ha/ano) de Abril a Junho"
+        >
+          <defs>
+            <linearGradient id="dashFg1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--p-primary-color)" stop-opacity="0.4" />
+              <stop offset="100%" stop-color="var(--p-primary-color)" stop-opacity="0.02" />
+            </linearGradient>
+            <linearGradient id="dashFg2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--p-primary-color)" stop-opacity="0.18" />
+              <stop offset="100%" stop-color="var(--p-primary-color)" stop-opacity="0.01" />
+            </linearGradient>
+          </defs>
+
+          <!-- Horizontal grid lines -->
+          <line
+            x1="50"
+            y1="15"
+            x2="800"
+            y2="15"
+            stroke="currentColor"
+            stroke-opacity="0.08"
+            stroke-width="0.8"
+          />
+          <line
+            x1="50"
+            y1="42"
+            x2="800"
+            y2="42"
+            stroke="currentColor"
+            stroke-opacity="0.08"
+            stroke-width="0.8"
+          />
+          <line
+            x1="50"
+            y1="70"
+            x2="800"
+            y2="70"
+            stroke="currentColor"
+            stroke-opacity="0.08"
+            stroke-width="0.8"
+          />
+          <line
+            x1="50"
+            y1="98"
+            x2="800"
+            y2="98"
+            stroke="currentColor"
+            stroke-opacity="0.08"
+            stroke-width="0.8"
+          />
+
+          <!-- Eucalyptus series — area fill -->
+          <path
+            d="M 60,88 L 90,64 L 120,79 L 150,48 L 180,60 L 210,32 L 240,44 L 270,20 L 300,36 L 330,56 L 360,24 L 390,42 L 420,14 L 450,32 L 480,60 L 510,36 L 540,72 L 570,48 L 600,76 L 630,44 L 660,60 L 690,30 L 720,48 L 750,24 L 780,42 L 780,115 L 60,115 Z"
+            fill="url(#dashFg1)"
+          />
+          <!-- Eucalyptus series — line stroke -->
+          <path
+            d="M 60,88 L 90,64 L 120,79 L 150,48 L 180,60 L 210,32 L 240,44 L 270,20 L 300,36 L 330,56 L 360,24 L 390,42 L 420,14 L 450,32 L 480,60 L 510,36 L 540,72 L 570,48 L 600,76 L 630,44 L 660,60 L 690,30 L 720,48 L 750,24 L 780,42"
+            fill="none"
+            stroke="var(--p-primary-color)"
+            stroke-width="1.8"
+          />
+
+          <!-- Pinus series — area fill (secondary) -->
+          <path
+            d="M 60,105 L 90,85 L 120,95 L 150,72 L 180,82 L 210,58 L 240,68 L 270,45 L 300,60 L 330,75 L 360,52 L 390,65 L 420,40 L 450,58 L 480,82 L 510,62 L 540,92 L 570,70 L 600,96 L 630,68 L 660,80 L 690,55 L 720,72 L 750,50 L 780,65 L 780,115 L 60,115 Z"
+            fill="url(#dashFg2)"
+          />
+          <!-- Pinus series — dashed line stroke -->
+          <path
+            d="M 60,105 L 90,85 L 120,95 L 150,72 L 180,82 L 210,58 L 240,68 L 270,45 L 300,60 L 330,75 L 360,52 L 390,65 L 420,40 L 450,58 L 480,82 L 510,62 L 540,92 L 570,70 L 600,96 L 630,68 L 660,80 L 690,55 L 720,72 L 750,50 L 780,65"
+            fill="none"
+            stroke="var(--p-primary-color)"
+            stroke-width="1.1"
+            stroke-opacity="0.45"
+            stroke-dasharray="5,3"
+          />
+
+          <!-- X axis date labels -->
+          <text
+            x="60"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Abr 1
+          </text>
+          <text
+            x="150"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Abr 13
+          </text>
+          <text
+            x="240"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Abr 26
+          </text>
+          <text
+            x="330"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Mai 8
+          </text>
+          <text
+            x="420"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Mai 21
+          </text>
+          <text
+            x="510"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Jun 3
+          </text>
+          <text
+            x="600"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Jun 15
+          </text>
+          <text
+            x="690"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Jun 21
+          </text>
+          <text
+            x="780"
+            y="133"
+            text-anchor="middle"
+            font-size="9"
+            fill="currentColor"
+            fill-opacity="0.45"
+          >
+            Jun 29
+          </text>
+
+          <!-- Legend -->
+          <rect x="610" y="6" width="8" height="8" rx="2" fill="var(--p-primary-color)" />
+          <text x="622" y="14" font-size="8.5" fill="currentColor" fill-opacity="0.6">
+            Eucalyptus
+          </text>
+          <rect
+            x="690"
+            y="6"
+            width="8"
+            height="8"
+            rx="2"
+            fill="var(--p-primary-color)"
+            fill-opacity="0.4"
+          />
+          <text x="702" y="14" font-size="8.5" fill="currentColor" fill-opacity="0.6">Pinus</text>
+        </svg>
+      </div>
+
+      <!-- TABLE SECTION -->
+      <div class="border border-surface rounded-xl bg-surface-0 overflow-hidden">
+        <!-- Tabs + Actions bar -->
+        <div
+          class="flex items-center justify-between px-4 pt-1 border-b border-surface flex-wrap gap-2"
+        >
+          <p-tabs value="inventario">
+            <p-tablist>
+              <p-tab value="inventario">Inventário</p-tab>
+              <p-tab value="medicoes">
+                <span class="flex items-center gap-1.5">
+                  Últimas Medições
+                  <span
+                    class="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded text-xs bg-surface-hover text-muted-color font-medium"
+                    >3</span
+                  >
+                </span>
+              </p-tab>
+              <p-tab value="equipe">
+                <span class="flex items-center gap-1.5">
+                  Equipe de Campo
+                  <span
+                    class="inline-flex items-center justify-center min-w-4 h-4 px-1 rounded text-xs bg-surface-hover text-muted-color font-medium"
+                    >2</span
+                  >
+                </span>
+              </p-tab>
+              <p-tab value="docs">Documentos Técnicos</p-tab>
+            </p-tablist>
+          </p-tabs>
+
+          <div class="flex items-center gap-2 pb-1">
+            <p-button
+              label="Personalizar Colunas"
+              icon="pi pi-table"
+              severity="secondary"
+              variant="outlined"
+              size="small"
+            />
+            <p-button label="+ Adicionar Talhão" size="small" />
+          </div>
+        </div>
+
+        <!-- Data Table -->
+        <p-table
+          [value]="forestPlots()"
+          [(selection)]="selectedPlots"
+          selectionMode="multiple"
+          [paginator]="true"
+          [rows]="10"
+          [rowsPerPageOptions]="[5, 10, 25]"
+          dataKey="talhao"
+          styleClass="p-datatable-sm"
+        >
+          <ng-template #header>
+            <tr>
+              <th style="width: 3rem">
+                <p-tableHeaderCheckbox />
+              </th>
+              <th pSortableColumn="talhao" style="min-width: 6rem">
+                Talhão <p-sortIcon field="talhao" />
+              </th>
+              <th pSortableColumn="fazenda" style="min-width: 10rem">
+                Fazenda <p-sortIcon field="fazenda" />
+              </th>
+              <th style="min-width: 12rem">Espécie</th>
+              <th pSortableColumn="tipo" style="min-width: 7rem">
+                Tipo <p-sortIcon field="tipo" />
+              </th>
+              <th pSortableColumn="status" style="min-width: 8rem">
+                Status <p-sortIcon field="status" />
+              </th>
+              <th pSortableColumn="idade" style="min-width: 6rem; text-align: right">
+                Idade (ano) <p-sortIcon field="idade" />
+              </th>
+              <th pSortableColumn="dap" style="min-width: 5.5rem; text-align: right">
+                DAP (cm) <p-sortIcon field="dap" />
+              </th>
+              <th pSortableColumn="area" style="min-width: 5rem; text-align: right">
+                Área (ha) <p-sortIcon field="area" />
+              </th>
+              <th style="min-width: 9rem">Responsável</th>
+              <th style="width: 3rem"></th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-plot>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="plot" />
+              </td>
+              <td class="font-medium">{{ plot.talhao }}</td>
+              <td>{{ plot.fazenda }}</td>
+              <td class="text-muted-color italic">{{ plot.especie }}</td>
+              <td>
+                <span class="text-xs px-2 py-0.5 rounded-sm bg-surface-hover text-muted-color">{{
+                  plot.tipo
+                }}</span>
+              </td>
+              <td>
+                <p-tag
+                  [value]="plot.status"
+                  [severity]="getStatusSeverity(plot.status)"
+                  [icon]="getStatusIcon(plot.status)"
+                />
+              </td>
+              <td style="text-align: right">{{ plot.idade }}</td>
+              <td style="text-align: right">{{ plot.dap | number: '1.1-1' }}</td>
+              <td style="text-align: right">{{ plot.area }}</td>
+              <td>
+                @if (plot.revisor) {
+                  {{ plot.revisor }}
+                } @else {
+                  <p-button
+                    label="Designar revisor"
+                    severity="secondary"
+                    variant="outlined"
+                    size="small"
+                    icon="pi pi-chevron-down"
+                    iconPos="right"
+                  />
+                }
+              </td>
+              <td>
+                <p-button
+                  icon="pi pi-ellipsis-v"
+                  severity="secondary"
+                  variant="text"
+                  size="small"
+                  [rounded]="true"
+                />
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #footer>
+            <tr>
+              <td colspan="11">
+                <span class="text-xs text-muted-color"
+                  >{{ selectedPlots.length }} de {{ forestPlots().length }} linha(s)
+                  selecionada(s).</span
+                >
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </main>
+</div>
