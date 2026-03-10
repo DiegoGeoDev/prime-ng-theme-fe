@@ -8,6 +8,7 @@ import { Tag } from 'primeng/tag';
 import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { AvatarModule } from 'primeng/avatar';
 import { Card } from 'primeng/card';
+import { Drawer } from 'primeng/drawer';
 
 export interface ForestPlot {
   talhao: string;
@@ -49,11 +50,14 @@ interface NavItem {
     Tab,
     AvatarModule,
     Card,
+    Drawer,
   ],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardBlock {
+  protected sidebarVisible = false;
+
   protected readonly kpiCards = signal<KpiCard[]>([
     {
       label: 'Área Total',
