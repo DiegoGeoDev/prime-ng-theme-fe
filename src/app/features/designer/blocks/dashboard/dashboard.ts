@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { DOCUMENT, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { TableModule } from 'primeng/table';
@@ -9,6 +9,7 @@ import { Tab, TabList, Tabs } from 'primeng/tabs';
 import { AvatarModule } from 'primeng/avatar';
 import { Card } from 'primeng/card';
 import { Drawer } from 'primeng/drawer';
+import { ChartModule } from 'primeng/chart';
 
 export interface ForestPlot {
   talhao: string;
@@ -51,12 +52,134 @@ interface NavItem {
     AvatarModule,
     Card,
     Drawer,
+    ChartModule,
   ],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DashboardBlock {
+export class DashboardBlock implements OnInit {
+  private readonly document = inject(DOCUMENT);
+
   protected sidebarVisible = false;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected readonly chartData = signal<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected readonly chartOptions = signal<any>(null);
+
+  ngOnInit(): void {
+    this.initChart();
+  }
+
+  private initChart(): void {
+    const style = getComputedStyle(this.document.documentElement);
+    const primary = style.getPropertyValue('--p-primary-color').trim() || '#10b981';
+    const mutedText = style.getPropertyValue('--p-text-muted-color').trim() || '#6b7280';
+    const borderColor = style.getPropertyValue('--p-content-border-color').trim() || '#e5e7eb';
+
+    this.chartData.set({
+      labels: [
+        'Abr 1',
+        'Abr 13',
+        'Abr 26',
+        'Mai 8',
+        'Mai 21',
+        'Jun 3',
+        'Jun 15',
+        'Jun 21',
+        'Jun 29',
+      ],
+      datasets: [
+        {
+          label: 'Eucalyptus',
+          data: [32, 48, 41, 64, 52, 80, 46, 72, 60],
+          fill: true,
+          tension: 0.4,
+          borderColor: primary,
+          backgroundColor: this.hexToRgba(primary, 0.12),
+          pointBackgroundColor: primary,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          borderWidth: 2,
+        },
+        {
+          label: 'Pinus',
+          data: [18, 28, 24, 40, 34, 55, 30, 48, 38],
+          fill: true,
+          tension: 0.4,
+          borderColor: primary,
+          borderDash: [5, 3],
+          backgroundColor: this.hexToRgba(primary, 0.05),
+          pointBackgroundColor: primary,
+          pointBorderColor: '#fff',
+          pointBorderWidth: 1.5,
+          pointRadius: 3,
+          pointHoverRadius: 5,
+          borderWidth: 1.5,
+          borderOpacity: 0.5,
+        },
+      ],
+    });
+
+    this.chartOptions.set({
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: false,
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx: { dataset: { label: string }; parsed: { y: number } }) =>
+              ` ${ctx.dataset.label}: ${ctx.parsed.y} m³/ha/ano`,
+          },
+        },
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: {
+            color: mutedText,
+            font: { size: 9 },
+            maxRotation: 0,
+          },
+        },
+        y: {
+          grid: {
+            color: borderColor,
+            lineWidth: 0.8,
+          },
+          border: { display: false, dash: [4, 4] },
+          ticks: {
+            color: mutedText,
+            font: { size: 9 },
+            stepSize: 20,
+          },
+          beginAtZero: true,
+          max: 100,
+        },
+      },
+    });
+  }
+
+  private hexToRgba(color: string, alpha: number): string {
+    // handles both hex (#rrggbb) and css var resolved values
+    const hex = color.replace('#', '');
+    if (hex.length === 6) {
+      const r = parseInt(hex.slice(0, 2), 16);
+      const g = parseInt(hex.slice(2, 4), 16);
+      const b = parseInt(hex.slice(4, 6), 16);
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+    // fallback for non-hex (e.g. oklch or rgb values)
+    return `color-mix(in srgb, ${color} ${Math.round(alpha * 100)}%, transparent)`;
+  }
 
   protected readonly kpiCards = signal<KpiCard[]>([
     {

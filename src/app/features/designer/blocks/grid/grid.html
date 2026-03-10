@@ -4,7 +4,7 @@
       <p-button
         [label]="block.label"
         [icon]="block.icon"
-        [outlined]="selectedBlockId() !== block.id"
+        [severity]="selectedBlockId() === block.id ? 'primary' : 'secondary'"
         size="small"
         (onClick)="selectBlock(block.id)"
       />
