@@ -43,7 +43,7 @@ function capitalize(str: string): string {
         placeholder="Select a component"
         [filter]="true"
         filterBy="label"
-        styleClass="w-full"
+        class="w-full"
       />
 
       @if (selectedComponent() && tokens()) {
@@ -55,7 +55,7 @@ function capitalize(str: string): string {
               <design-component-section [componentKey]="selectedComponent()!" [path]="entry" />
             }
           } @else {
-            <span class="text-[var(--p-text-muted-color)]">No common design tokens</span>
+            <span class="text-muted-color">No common design tokens</span>
           }
         </p-fieldset>
 
@@ -86,7 +86,7 @@ function capitalize(str: string): string {
               </p-tabpanels>
             </p-tabs>
           } @else {
-            <span class="text-[var(--p-text-muted-color)]">No color scheme tokens</span>
+            <span class="text-muted-color">No color scheme tokens</span>
           }
         </p-fieldset>
       }
