@@ -10,8 +10,8 @@
 
 <div class="h-full w-full grid place-items-center">
   <p-card
-    header="Login to your account"
-    subheader="Enter your email below to login to your account"
+    header="Entre na sua conta"
+    subheader="Digite seu email e senha para acessar sua conta"
     class="border! border-surface!"
   >
     <form [formGroup]="form" (ngSubmit)="onLogin()" class="flex flex-col gap-4 mt-4">
@@ -23,33 +23,39 @@
             pInputText
             id="login-email"
             type="email"
-            placeholder="email@example.com"
+            placeholder="email@dominio.com"
             class="w-full"
             formControlName="email"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
             <p-message severity="error" size="small" variant="simple"
-              >Enter a valid email address.</p-message
+              >Informe um e-mail válido.</p-message
             >
           }
         </div>
 
         <div class="flex flex-col gap-1">
           <div class="flex justify-between items-center">
-            <label for="login-password">Password</label>
-            <p-button label="Forgot your password?" link="true" size="small" type="button" styleClass="p-0!" />
+            <label for="login-password">Senha</label>
+            <p-button
+              label="Esqueceu sua senha?"
+              link="true"
+              size="small"
+              type="button"
+              styleClass="p-0!"
+            />
           </div>
           <input
             pInputText
             id="login-password"
-            placeholder="********"
+            placeholder="******"
             type="password"
             class="w-full"
             formControlName="password"
           />
           @if (form.controls.password.invalid && form.controls.password.touched) {
             <p-message severity="error" size="small" variant="simple"
-              >Password must be at least 6 characters.</p-message
+              >Senha precisa ter no mínimo 6 caracteres</p-message
             >
           }
         </div>
@@ -60,7 +66,7 @@
         <p-button label="Login" [fluid]="true" type="submit" />
 
         <p-button
-          label="Login with Microsoft"
+          label="Login com Microsoft"
           variant="outlined"
           severity="secondary"
           [fluid]="true"
@@ -69,8 +75,8 @@
         />
 
         <div class="flex gap-2 justify-center items-center">
-          <p class="text-sm text-center text-muted-color">Don't have an account?</p>
-          <p-button label="Sign up" link="true" size="small" type="button" styleClass="p-0!" />
+          <p class="text-sm text-center text-muted-color">Não tem uma conta?</p>
+          <p-button label="Cadastre-se" link="true" size="small" type="button" styleClass="p-0!" />
         </div>
       </div>
     </form>

@@ -18,6 +18,7 @@ export interface BlockOption {
   imports: [NgComponentOutlet, Button],
   templateUrl: './grid.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block h-full' },
 })
 export class Grid {
   protected readonly blocks = signal<BlockOption[]>([
