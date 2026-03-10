@@ -362,6 +362,12 @@ export class DashboardBlock implements OnInit {
 
   protected selectedColumns: Column[] = [...this.cols];
 
+  protected sortSelectedColumns(): void {
+    this.selectedColumns = this.cols.filter(col =>
+      this.selectedColumns.some(sc => sc.field === col.field),
+    );
+  }
+
   protected selectedPlots: ForestPlot[] = [];
 
   protected getStatusSeverity(status: string): 'success' | 'warn' | 'secondary' {
