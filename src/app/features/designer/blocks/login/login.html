@@ -1,4 +1,11 @@
-<p-toast />
+<p-toast>
+  <ng-template #message let-message>
+    <div class="flex flex-col gap-1 flex-1">
+      <span class="font-semibold">{{ message.summary }}</span>
+      <span class="text-sm">{{ message.detail }}</span>
+    </div>
+  </ng-template>
+</p-toast>
 
 <div class="h-full w-full grid place-items-center">
   <p-card
@@ -19,12 +26,17 @@
             formControlName="email"
           />
           @if (form.controls.email.invalid && form.controls.email.touched) {
-            <p-message severity="error" size="small" variant="simple">Enter a valid email address.</p-message>
+            <p-message severity="error" size="small" variant="simple"
+              >Enter a valid email address.</p-message
+            >
           }
         </div>
 
         <div class="flex flex-col gap-1">
-          <label for="login-password">Password</label>
+          <div class="flex justify-between items-center">
+            <label for="login-password">Password</label>
+            <p-button label="Forgot your password?" link="true" size="small" type="button" styleClass="p-0!" />
+          </div>
           <input
             pInputText
             id="login-password"
@@ -34,12 +46,10 @@
             formControlName="password"
           />
           @if (form.controls.password.invalid && form.controls.password.touched) {
-            <p-message severity="error" size="small" variant="simple">Password must be at least 6 characters.</p-message>
+            <p-message severity="error" size="small" variant="simple"
+              >Password must be at least 6 characters.</p-message
+            >
           }
-
-          <div class="flex justify-center items-center">
-            <p-button label="Forgot your password?" link="true" size="small" type="button" />
-          </div>
         </div>
       </div>
 
@@ -47,16 +57,17 @@
         <p-button label="Login" [fluid]="true" type="submit" />
 
         <p-button
-          label="Login with Google"
+          label="Login with Microsoft"
           variant="outlined"
           severity="secondary"
           [fluid]="true"
           type="button"
+          icon="pi pi-microsoft"
         />
 
-        <div class="flex justify-center items-center">
+        <div class="flex gap-2 justify-center items-center">
           <p class="text-sm text-center text-muted-color">Don't have an account?</p>
-          <p-button label="Sign up" link="true" size="small" type="button" />
+          <p-button label="Sign up" link="true" size="small" type="button" styleClass="p-0!" />
         </div>
       </div>
     </form>
