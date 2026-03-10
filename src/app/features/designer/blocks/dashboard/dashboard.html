@@ -214,7 +214,9 @@
 
           <p-tabpanels class="bg-(--p-overlay-modal-background)!">
             <p-tabpanel value="0">
-              <div class="border border-surface rounded-lg p-2 overflow-auto bg-(--p-content-background)">
+              <div
+                class="border border-surface rounded-lg overflow-hidden bg-(--p-content-background)"
+              >
                 <p-table
                   [value]="forestPlots()"
                   [(selection)]="selectedPlots"
@@ -224,27 +226,42 @@
                   [rowsPerPageOptions]="[5, 10, 25]"
                   dataKey="talhao"
                   class="p-datatable-sm"
-                  showGridlines="false"
-                  scrollable="false"
-                  stripedRows="true"
+                  [scrollable]="true"
+                  scrollHeight="400px"
+                  [tableStyle]="{ 'min-width': '62rem' }"
+                  [stripedRows]="true"
                   [showCurrentPageReport]="true"
                   currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} registros"
                 >
                   <ng-template #header>
                     <tr>
-                      <th>
+                      <th style="width: 3rem; min-width: 3rem">
                         <p-tableHeaderCheckbox />
                       </th>
-                      <th pSortableColumn="talhao">Talhão <p-sortIcon field="talhao" /></th>
-                      <th pSortableColumn="fazenda">Fazenda <p-sortIcon field="fazenda" /></th>
-                      <th>Espécie</th>
-                      <th pSortableColumn="tipo">Tipo <p-sortIcon field="tipo" /></th>
-                      <th pSortableColumn="status">Status <p-sortIcon field="status" /></th>
-                      <th pSortableColumn="idade">Idade (ano) <p-sortIcon field="idade" /></th>
-                      <th pSortableColumn="dap">DAP (cm) <p-sortIcon field="dap" /></th>
-                      <th pSortableColumn="area">Área (ha) <p-sortIcon field="area" /></th>
-                      <th>Responsável</th>
-                      <th></th>
+                      <th style="min-width: 7rem" pSortableColumn="talhao">
+                        Talhão <p-sortIcon field="talhao" />
+                      </th>
+                      <th style="min-width: 9rem" pSortableColumn="fazenda">
+                        Fazenda <p-sortIcon field="fazenda" />
+                      </th>
+                      <th style="min-width: 10rem">Espécie</th>
+                      <th style="min-width: 7rem" pSortableColumn="tipo">
+                        Tipo <p-sortIcon field="tipo" />
+                      </th>
+                      <th style="min-width: 9rem" pSortableColumn="status">
+                        Status <p-sortIcon field="status" />
+                      </th>
+                      <th style="min-width: 8rem" pSortableColumn="idade">
+                        Idade (ano) <p-sortIcon field="idade" />
+                      </th>
+                      <th style="min-width: 8rem" pSortableColumn="dap">
+                        DAP (cm) <p-sortIcon field="dap" />
+                      </th>
+                      <th style="min-width: 8rem" pSortableColumn="area">
+                        Área (ha) <p-sortIcon field="area" />
+                      </th>
+                      <th style="min-width: 9rem">Responsável</th>
+                      <th style="width: 4rem; min-width: 4rem"></th>
                     </tr>
                   </ng-template>
 
@@ -267,7 +284,7 @@
                       <td>{{ plot.idade }}</td>
                       <td>{{ plot.dap | number: '1.1-1' }}</td>
                       <td>{{ plot.area }}</td>
-                      <td>{{ plot.revisor }}</td>
+                      <td>{{ plot.revisor ?? '—' }}</td>
                       <td>
                         <p-button
                           icon="pi pi-ellipsis-v"
