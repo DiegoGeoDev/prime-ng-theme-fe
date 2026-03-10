@@ -6,7 +6,7 @@
     subheader="Enter your email below to login to your account"
     class="border! border-surface!"
   >
-    <div class="flex flex-col gap-4 mt-4">
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="flex flex-col gap-4 mt-4">
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-1">
           <label for="login-email">Email</label>
@@ -16,42 +16,49 @@
             type="email"
             placeholder="email@example.com"
             class="w-full"
-            [(ngModel)]="email"
+            formControlName="email"
           />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p-message severity="error" size="small" variant="simple">Enter a valid email address.</p-message>
+          }
         </div>
 
         <div class="flex flex-col gap-1">
-          <label for="login-password"> Password </label>
+          <label for="login-password">Password</label>
           <input
             pInputText
             id="login-password"
             placeholder="********"
             type="password"
             class="w-full"
-            [(ngModel)]="password"
+            formControlName="password"
           />
+          @if (form.controls.password.invalid && form.controls.password.touched) {
+            <p-message severity="error" size="small" variant="simple">Password must be at least 6 characters.</p-message>
+          }
 
           <div class="flex justify-center items-center">
-            <p-button label="Forgot your password?" link="true" size="small" />
+            <p-button label="Forgot your password?" link="true" size="small" type="button" />
           </div>
         </div>
       </div>
 
       <div class="flex flex-col gap-2">
-        <p-button label="Login" [fluid]="true" (onClick)="onLogin()" />
+        <p-button label="Login" [fluid]="true" type="submit" />
 
         <p-button
           label="Login with Google"
           variant="outlined"
           severity="secondary"
           [fluid]="true"
+          type="button"
         />
 
         <div class="flex justify-center items-center">
           <p class="text-sm text-center text-muted-color">Don't have an account?</p>
-          <p-button label="Sign up" link="true" size="small" />
+          <p-button label="Sign up" link="true" size="small" type="button" />
         </div>
       </div>
-    </div>
+    </form>
   </p-card>
 </div>

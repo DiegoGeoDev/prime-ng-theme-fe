@@ -1,16 +1,17 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Button } from 'primeng/button';
 import { InputText } from 'primeng/inputtext';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
+import { Message } from 'primeng/message';
 
 @Component({
   selector: 'app-login-block',
   standalone: true,
-  imports: [FormsModule, Button, InputText, ToastModule, CardModule],
+  imports: [ReactiveFormsModule, Button, InputText, ToastModule, CardModule, Message],
   providers: [MessageService],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,14 +19,28 @@ import { CardModule } from 'primeng/card';
 export class LoginBlock {
   private readonly messageService = inject(MessageService);
 
-  protected readonly email = signal('');
-  protected readonly password = signal('');
+  protected readonly form = new FormGroup({
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(6)],
+    }),
+  });
 
   protected onLogin(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { email, password } = this.form.getRawValue();
     this.messageService.add({
       severity: 'info',
       summary: 'Login',
-      detail: `Email: ${this.email()} | Password: ${this.password()}`,
+      detail: `Email: ${email} | Password: ${password}`,
       life: 5000,
     });
   }
