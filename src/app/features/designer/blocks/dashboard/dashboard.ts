@@ -10,6 +10,14 @@ import { AvatarModule } from 'primeng/avatar';
 import { Card } from 'primeng/card';
 import { Drawer } from 'primeng/drawer';
 import { ChartModule } from 'primeng/chart';
+import { MultiSelect } from 'primeng/multiselect';
+
+export interface Column {
+  field: string;
+  header: string;
+  sortable: boolean;
+  style: string;
+}
 
 export interface ForestPlot {
   talhao: string;
@@ -51,6 +59,7 @@ interface NavItem {
     Card,
     Drawer,
     ChartModule,
+    MultiSelect,
   ],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -338,6 +347,20 @@ export class DashboardBlock implements OnInit {
       revisor: 'Paulo Souza',
     },
   ]);
+
+  protected readonly cols: Column[] = [
+    { field: 'talhao', header: 'Talhão', sortable: true, style: 'min-width: 7rem' },
+    { field: 'fazenda', header: 'Fazenda', sortable: true, style: 'min-width: 9rem' },
+    { field: 'especie', header: 'Espécie', sortable: false, style: 'min-width: 10rem' },
+    { field: 'tipo', header: 'Tipo', sortable: true, style: 'min-width: 7rem' },
+    { field: 'status', header: 'Status', sortable: true, style: 'min-width: 9rem' },
+    { field: 'idade', header: 'Idade (ano)', sortable: true, style: 'min-width: 8rem' },
+    { field: 'dap', header: 'DAP (cm)', sortable: true, style: 'min-width: 8rem' },
+    { field: 'area', header: 'Área (ha)', sortable: true, style: 'min-width: 8rem' },
+    { field: 'revisor', header: 'Responsável', sortable: false, style: 'min-width: 9rem' },
+  ];
+
+  protected selectedColumns: Column[] = [...this.cols];
 
   protected selectedPlots: ForestPlot[] = [];
 
