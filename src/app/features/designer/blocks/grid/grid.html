@@ -11,8 +11,8 @@
     }
   </nav>
 
-  <div class="flex-1 p-4 pt-0 overflow-hidden">
-    <div class="w-full h-full border! border-surface! rounded-lg overflow-auto">
+  <div class="flex-1 p-4 pt-0 overflow-hidden grid place-items-center">
+    <div class="w-full max-w-7xl h-full border border-surface rounded-lg overflow-auto">
       @if (selectedComponent) {
         <ng-container *ngComponentOutlet="$any(selectedComponent)" />
       }

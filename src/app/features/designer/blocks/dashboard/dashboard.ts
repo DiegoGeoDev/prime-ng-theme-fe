@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { Tab, TabList, Tabs } from 'primeng/tabs';
+import { TabsModule } from 'primeng/tabs';
 import { AvatarModule } from 'primeng/avatar';
 import { Card } from 'primeng/card';
 import { Drawer } from 'primeng/drawer';
@@ -46,9 +46,7 @@ interface NavItem {
     TableModule,
     Button,
     Tag,
-    Tabs,
-    TabList,
-    Tab,
+    TabsModule,
     AvatarModule,
     Card,
     Drawer,
@@ -304,7 +302,7 @@ export class DashboardBlock implements OnInit {
       idade: 9,
       dap: 28.6,
       area: 7,
-      revisor: null,
+      revisor: 'Paulo Souza',
     },
     {
       talhao: 'T-008',
@@ -315,7 +313,7 @@ export class DashboardBlock implements OnInit {
       idade: 3,
       dap: 10.2,
       area: 23,
-      revisor: null,
+      revisor: 'Paulo Souza',
     },
     {
       talhao: 'T-009',
@@ -326,7 +324,7 @@ export class DashboardBlock implements OnInit {
       idade: 4,
       dap: 13.9,
       area: 30,
-      revisor: null,
+      revisor: 'Paulo Souza',
     },
     {
       talhao: 'T-010',
@@ -337,7 +335,7 @@ export class DashboardBlock implements OnInit {
       idade: 7,
       dap: 21.3,
       area: 28,
-      revisor: null,
+      revisor: 'Paulo Souza',
     },
   ]);
 
