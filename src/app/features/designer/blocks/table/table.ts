@@ -31,7 +31,6 @@ import { InputIcon } from 'primeng/inputicon';
 import { Dialog } from 'primeng/dialog';
 import { InputNumber } from 'primeng/inputnumber';
 import { Tooltip } from 'primeng/tooltip';
-import { Badge } from 'primeng/badge';
 
 export interface Column {
   field: string;
@@ -98,7 +97,6 @@ const SEED_DATA: ForestPlot[] = [
     Dialog,
     InputNumber,
     Tooltip,
-    Badge,
   ],
   providers: [ConfirmationService],
   templateUrl: './table.html',
