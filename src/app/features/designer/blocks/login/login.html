@@ -45,13 +45,13 @@
               styleClass="p-0!"
             />
           </div>
-          <input
-            pInputText
+          <p-password
             id="login-password"
-            placeholder="******"
-            type="password"
-            class="w-full"
             formControlName="password"
+            [fluid]="true"
+            [toggleMask]="true"
+            [feedback]="false"
+            autocomplete="off"
           />
           @if (form.controls.password.invalid && form.controls.password.touched) {
             <p-message severity="error" size="small" variant="simple"

@@ -7,11 +7,20 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { Message } from 'primeng/message';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
   selector: 'app-login-block',
   standalone: true,
-  imports: [ReactiveFormsModule, Button, InputText, ToastModule, CardModule, Message],
+  imports: [
+    ReactiveFormsModule,
+    Button,
+    InputText,
+    ToastModule,
+    CardModule,
+    Message,
+    PasswordModule,
+  ],
   providers: [MessageService],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
