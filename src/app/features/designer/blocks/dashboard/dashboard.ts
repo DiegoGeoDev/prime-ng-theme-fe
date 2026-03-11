@@ -11,6 +11,8 @@ import { Card } from 'primeng/card';
 import { Drawer } from 'primeng/drawer';
 import { ChartModule } from 'primeng/chart';
 import { MultiSelect } from 'primeng/multiselect';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 export interface Column {
   field: string;
@@ -60,12 +62,15 @@ interface NavItem {
     Drawer,
     ChartModule,
     MultiSelect,
+    ConfirmDialog,
   ],
+  providers: [ConfirmationService],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardBlock implements OnInit {
   private readonly document = inject(DOCUMENT);
+  private readonly confirmationService = inject(ConfirmationService);
 
   protected sidebarVisible = false;
 
@@ -380,5 +385,16 @@ export class DashboardBlock implements OnInit {
     if (status === 'Concluído') return 'pi pi-check-circle';
     if (status === 'Em Progresso') return 'pi pi-clock';
     return 'pi pi-circle';
+  }
+
+  protected confirmLogout(): void {
+    this.confirmationService.confirm({
+      header: 'Sair da aplicação',
+      message: 'Tem certeza que deseja sair?',
+      rejectButtonProps: { label: 'Cancelar', severity: 'secondary', variant: 'outlined' },
+      acceptButtonProps: { label: 'Sair', severity: 'danger' },
+      accept: () => {console.log('Usuário confirmou logout');},
+      reject: () => {console.log('Usuário cancelou logout');},
+    });
   }
 }
