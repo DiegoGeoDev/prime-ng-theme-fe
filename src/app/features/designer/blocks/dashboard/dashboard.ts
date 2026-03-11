@@ -1,6 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { DOCUMENT, DecimalPipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 
 import { TableModule } from 'primeng/table';
 import { Button } from 'primeng/button';
@@ -16,6 +25,9 @@ import { ConfirmationService } from 'primeng/api';
 import { InputText } from 'primeng/inputtext';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { Dialog } from 'primeng/dialog';
+import { InputNumber } from 'primeng/inputnumber';
+import { Tooltip } from 'primeng/tooltip';
 
 export interface Column {
   field: string;
@@ -79,6 +91,7 @@ interface RecentDocument {
   imports: [
     DecimalPipe,
     FormsModule,
+    ReactiveFormsModule,
     TableModule,
     Button,
     Tag,
@@ -92,6 +105,9 @@ interface RecentDocument {
     InputText,
     IconField,
     InputIcon,
+    Dialog,
+    InputNumber,
+    Tooltip,
   ],
   providers: [ConfirmationService],
   templateUrl: './dashboard.html',
@@ -100,8 +116,16 @@ interface RecentDocument {
 export class DashboardBlock implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly fb = inject(FormBuilder);
 
   protected sidebarVisible = false;
+
+  protected readonly viewDialogVisible = signal(false);
+  protected readonly editDialogVisible = signal(false);
+  protected readonly createDialogVisible = signal(false);
+  protected readonly selectedPlot = signal<ForestPlot | null>(null);
+  protected editForm!: FormGroup;
+  protected createForm!: FormGroup;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected readonly chartData = signal<any>(null);
@@ -121,8 +145,44 @@ export class DashboardBlock implements OnInit {
     { name: 'laudo_tecnico_talhao.docx', ext: 'docx', icon: 'word.svg', size: '302 KB' },
   ]);
 
+  enumValidator(allowedValues: string[]): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) return null;
+      return allowedValues.includes(control.value)
+        ? null
+        : { invalidEnum: { value: control.value, allowed: allowedValues } };
+    };
+  }
+
   ngOnInit(): void {
     this.initChart();
+    const plotFormConfig = {
+      talhao: ['', [Validators.required, Validators.pattern(/^T-\d{3}$/)]],
+      fazenda: ['', Validators.required],
+      especie: [
+        '',
+        [
+          Validators.required,
+          this.enumValidator([
+            'Eucalyptus urophylla',
+            'Eucalyptus grandis',
+            'Pinus elliottii',
+            'Pinus taeda',
+            'Eucalyptus saligna',
+            'Teca (Tectona grandis)',
+            'Pinus caribaea',
+          ]),
+        ],
+      ],
+      tipo: ['', Validators.required],
+      status: ['', Validators.required],
+      idade: [null as number | null, [Validators.required, Validators.min(0)]],
+      dap: [null as number | null, [Validators.required, Validators.min(0)]],
+      area: [null as number | null, [Validators.required, Validators.min(0)]],
+      revisor: [null as string | null],
+    };
+    this.editForm = this.fb.group(plotFormConfig);
+    this.createForm = this.fb.group(plotFormConfig);
   }
 
   private initChart(): void {
@@ -410,8 +470,8 @@ export class DashboardBlock implements OnInit {
   protected selectedColumns: Column[] = [...this.cols];
 
   protected sortSelectedColumns(): void {
-    this.selectedColumns = this.cols.filter(col =>
-      this.selectedColumns.some(sc => sc.field === col.field),
+    this.selectedColumns = this.cols.filter((col) =>
+      this.selectedColumns.some((sc) => sc.field === col.field),
     );
   }
 
@@ -433,22 +493,76 @@ export class DashboardBlock implements OnInit {
     {
       fazenda: 'Fazenda Boa Vista',
       items: [
-        { id: 'T-001', talhao: 'T-001', especie: 'Eucalyptus urophylla', tipo: 'Inventário', status: 'Em Progresso', tempo: '30 min atrás', icon: 'pi pi-list-check', iconColor: '#10b981' },
-        { id: 'T-002', talhao: 'T-002', especie: 'Eucalyptus grandis', tipo: 'Inventário', status: 'Concluído', tempo: '2 horas atrás', icon: 'pi pi-list-check', iconColor: '#10b981' },
+        {
+          id: 'T-001',
+          talhao: 'T-001',
+          especie: 'Eucalyptus urophylla',
+          tipo: 'Inventário',
+          status: 'Em Progresso',
+          tempo: '30 min atrás',
+          icon: 'pi pi-list-check',
+          iconColor: '#10b981',
+        },
+        {
+          id: 'T-002',
+          talhao: 'T-002',
+          especie: 'Eucalyptus grandis',
+          tipo: 'Inventário',
+          status: 'Concluído',
+          tempo: '2 horas atrás',
+          icon: 'pi pi-list-check',
+          iconColor: '#10b981',
+        },
       ],
     },
     {
       fazenda: 'Fazenda São João',
       items: [
-        { id: 'T-003', talhao: 'T-003', especie: 'Pinus elliottii', tipo: 'Medição', status: 'Concluído', tempo: '1 hora atrás', icon: 'pi pi-chart-bar', iconColor: '#3b82f6' },
-        { id: 'T-004', talhao: 'T-004', especie: 'Pinus taeda', tipo: 'Medição', status: 'Em Progresso', tempo: '3 horas atrás', icon: 'pi pi-chart-bar', iconColor: '#3b82f6' },
+        {
+          id: 'T-003',
+          talhao: 'T-003',
+          especie: 'Pinus elliottii',
+          tipo: 'Medição',
+          status: 'Concluído',
+          tempo: '1 hora atrás',
+          icon: 'pi pi-chart-bar',
+          iconColor: '#3b82f6',
+        },
+        {
+          id: 'T-004',
+          talhao: 'T-004',
+          especie: 'Pinus taeda',
+          tipo: 'Medição',
+          status: 'Em Progresso',
+          tempo: '3 horas atrás',
+          icon: 'pi pi-chart-bar',
+          iconColor: '#3b82f6',
+        },
       ],
     },
     {
       fazenda: 'Fazenda Verde',
       items: [
-        { id: 'T-005', talhao: 'T-005', especie: 'Eucalyptus urophylla', tipo: 'Colheita', status: 'Em Progresso', tempo: '45 min atrás', icon: 'pi pi-box', iconColor: '#f59e0b' },
-        { id: 'T-006', talhao: 'T-006', especie: 'Eucalyptus saligna', tipo: 'Colheita', status: 'Concluído', tempo: '1 dia atrás', icon: 'pi pi-box', iconColor: '#f59e0b' },
+        {
+          id: 'T-005',
+          talhao: 'T-005',
+          especie: 'Eucalyptus urophylla',
+          tipo: 'Colheita',
+          status: 'Em Progresso',
+          tempo: '45 min atrás',
+          icon: 'pi pi-box',
+          iconColor: '#f59e0b',
+        },
+        {
+          id: 'T-006',
+          talhao: 'T-006',
+          especie: 'Eucalyptus saligna',
+          tipo: 'Colheita',
+          status: 'Concluído',
+          tempo: '1 dia atrás',
+          icon: 'pi pi-box',
+          iconColor: '#f59e0b',
+        },
       ],
     },
   ]);
@@ -461,14 +575,61 @@ export class DashboardBlock implements OnInit {
     return 'text-muted-color';
   }
 
+  protected openViewDialog(plot: ForestPlot): void {
+    this.selectedPlot.set(plot);
+    this.viewDialogVisible.set(true);
+  }
+
+  protected openEditDialog(plot: ForestPlot): void {
+    this.selectedPlot.set(plot);
+    this.editForm.patchValue(plot);
+    this.editDialogVisible.set(true);
+  }
+
+  protected openCreateDialog(): void {
+    this.createForm.reset();
+    this.createDialogVisible.set(true);
+  }
+
+  protected saveEdit(): void {
+    if (this.editForm.invalid) return;
+    console.log('Atualizar talhão:', this.editForm.value);
+    this.editDialogVisible.set(false);
+  }
+
+  protected saveCreate(): void {
+    if (this.createForm.invalid) return;
+    console.log('Criar talhão:', this.createForm.value);
+    this.createDialogVisible.set(false);
+  }
+
+  protected confirmDelete(plot: ForestPlot): void {
+    this.confirmationService.confirm({
+      header: 'Deletar Talhão',
+      message: `Tem certeza que deseja deletar o talhão "${plot.talhao}"?`,
+      rejectButtonProps: { label: 'Cancelar', severity: 'secondary', variant: 'outlined' },
+      acceptButtonProps: { label: 'Deletar', severity: 'danger' },
+      accept: () => {
+        console.log('Deletar talhão:', plot);
+      },
+      reject: () => {
+        console.log('Deleção cancelada');
+      },
+    });
+  }
+
   protected confirmLogout(): void {
     this.confirmationService.confirm({
       header: 'Sair da aplicação',
       message: 'Tem certeza que deseja sair?',
       rejectButtonProps: { label: 'Cancelar', severity: 'secondary', variant: 'outlined' },
       acceptButtonProps: { label: 'Sair', severity: 'danger' },
-      accept: () => {console.log('Usuário confirmou logout');},
-      reject: () => {console.log('Usuário cancelou logout');},
+      accept: () => {
+        console.log('Usuário confirmou logout');
+      },
+      reject: () => {
+        console.log('Usuário cancelou logout');
+      },
     });
   }
 }

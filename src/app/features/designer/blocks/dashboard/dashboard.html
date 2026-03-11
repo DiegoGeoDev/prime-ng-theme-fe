@@ -105,6 +105,232 @@
 
   <p-confirmdialog styleClass="min-w-80!" />
 
+  <!-- ===== VIEW DIALOG ===== -->
+  <p-dialog
+    header="Ver Talhão"
+    [visible]="viewDialogVisible()"
+    (visibleChange)="viewDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    @if (selectedPlot(); as plot) {
+      <div class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Talhão</label>
+          <input pInputText [value]="plot.talhao" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Fazenda</label>
+          <input pInputText [value]="plot.fazenda" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Espécie</label>
+          <input pInputText [value]="plot.especie" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Tipo</label>
+          <input pInputText [value]="plot.tipo" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Status</label>
+          <input pInputText [value]="plot.status" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Responsável</label>
+          <input pInputText [value]="plot.revisor ?? '—'" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Idade (anos)</label>
+          <input pInputText [value]="plot.idade" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">DAP (cm)</label>
+          <input pInputText [value]="plot.dap" [disabled]="true" class="w-full" />
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-color">Área (ha)</label>
+          <input pInputText [value]="plot.area" [disabled]="true" class="w-full" />
+        </div>
+      </div>
+    }
+    <ng-template #footer>
+      <p-button label="Fechar" severity="secondary" (onClick)="viewDialogVisible.set(false)" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== EDIT DIALOG ===== -->
+  <p-dialog
+    header="Atualizar Talhão"
+    [visible]="editDialogVisible()"
+    (visibleChange)="editDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="editForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Talhão <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="talhao" class="w-full" />
+        @if (editForm.get('talhao')?.invalid && editForm.get('talhao')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Fazenda <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="fazenda" class="w-full" />
+        @if (editForm.get('fazenda')?.invalid && editForm.get('fazenda')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Espécie <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="especie" class="w-full" />
+        @if (editForm.get('especie')?.invalid && editForm.get('especie')?.touched) {
+          <small class="text-red-500">Espécie inválida.</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Tipo <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="tipo" class="w-full" />
+        @if (editForm.get('tipo')?.invalid && editForm.get('tipo')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Status <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="status" class="w-full" />
+        @if (editForm.get('status')?.invalid && editForm.get('status')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Responsável</label>
+        <input pInputText formControlName="revisor" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Idade (anos) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="idade" [min]="0" [useGrouping]="false" class="w-full" />
+        @if (editForm.get('idade')?.invalid && editForm.get('idade')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('idade')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">DAP (cm) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="dap" [min]="0" [minFractionDigits]="1" [maxFractionDigits]="1" [useGrouping]="false" class="w-full" />
+        @if (editForm.get('dap')?.invalid && editForm.get('dap')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('dap')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color">Área (ha) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="area" [min]="0" [maxFractionDigits]="2" [useGrouping]="false" class="w-full" />
+        @if (editForm.get('area')?.invalid && editForm.get('area')?.touched) {
+          <small class="text-red-500">
+            @if (editForm.get('area')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button label="Cancelar" severity="secondary" variant="outlined" (onClick)="editDialogVisible.set(false)" />
+      <p-button label="Atualizar" [disabled]="editForm.invalid" (onClick)="saveEdit()" />
+    </ng-template>
+  </p-dialog>
+
+  <!-- ===== CREATE DIALOG ===== -->
+  <p-dialog
+    header="Novo Talhão"
+    [visible]="createDialogVisible()"
+    (visibleChange)="createDialogVisible.set($event)"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '40rem' }"
+  >
+    <form [formGroup]="createForm" class="grid grid-cols-2 gap-x-4 gap-y-4 py-2">
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Talhão <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="talhao" class="w-full" />
+        @if (createForm.get('talhao')?.invalid && createForm.get('talhao')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Fazenda <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="fazenda" class="w-full" />
+        @if (createForm.get('fazenda')?.invalid && createForm.get('fazenda')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Espécie <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="especie" class="w-full" />
+        @if (createForm.get('especie')?.invalid && createForm.get('especie')?.touched) {
+          <small class="text-red-500">Espécie inválida.</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Tipo <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="tipo" class="w-full" />
+        @if (createForm.get('tipo')?.invalid && createForm.get('tipo')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Status <span class="text-red-500">*</span></label>
+        <input pInputText formControlName="status" class="w-full" />
+        @if (createForm.get('status')?.invalid && createForm.get('status')?.touched) {
+          <small class="text-red-500">Campo obrigatório</small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Responsável</label>
+        <input pInputText formControlName="revisor" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">Idade (anos) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="idade" [min]="0" [useGrouping]="false" class="w-full" />
+        @if (createForm.get('idade')?.invalid && createForm.get('idade')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('idade')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1">
+        <label class="text-sm font-medium text-color">DAP (cm) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="dap" [min]="0" [minFractionDigits]="1" [maxFractionDigits]="1" [useGrouping]="false" class="w-full" />
+        @if (createForm.get('dap')?.invalid && createForm.get('dap')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('dap')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+      <div class="flex flex-col gap-1 col-span-2">
+        <label class="text-sm font-medium text-color">Área (ha) <span class="text-red-500">*</span></label>
+        <p-inputnumber formControlName="area" [min]="0" [maxFractionDigits]="2" [useGrouping]="false" class="w-full" />
+        @if (createForm.get('area')?.invalid && createForm.get('area')?.touched) {
+          <small class="text-red-500">
+            @if (createForm.get('area')?.hasError('required')) { Campo obrigatório }
+            @else { Deve ser ≥ 0 }
+          </small>
+        }
+      </div>
+    </form>
+    <ng-template #footer>
+      <p-button label="Cancelar" severity="secondary" variant="outlined" (onClick)="createDialogVisible.set(false)" />
+      <p-button label="Cadastrar" [disabled]="createForm.invalid" (onClick)="saveCreate()" />
+    </ng-template>
+  </p-dialog>
+
   <!-- ===== MAIN CONTENT ===== -->
   <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
     <!-- Header -->
@@ -235,7 +461,13 @@
                   currentPageReportTemplate="Mostrando {first} até {last} de {totalRecords} registros"
                 >
                   <ng-template #caption>
-                    <div class="flex justify-end px-1 py-1">
+                    <div class="flex items-center justify-between px-1 py-1">
+                      <p-button
+                        label="Novo Talhão"
+                        icon="pi pi-plus"
+                        size="small"
+                        (onClick)="openCreateDialog()"
+                      />
                       <p-multiselect
                         [options]="cols"
                         [(ngModel)]="selectedColumns"
@@ -263,7 +495,7 @@
                           <th [style]="col.style">{{ col.header }}</th>
                         }
                       }
-                      <th style="width: 4rem; min-width: 4rem"></th>
+                      <th style="width: 9rem; min-width: 9rem"></th>
                     </tr>
                   </ng-template>
 
@@ -295,13 +527,38 @@
                         </td>
                       }
                       <td>
-                        <p-button
-                          icon="pi pi-ellipsis-v"
-                          severity="secondary"
-                          variant="text"
-                          size="small"
-                          [rounded]="true"
-                        />
+                        <div class="flex gap-0.5">
+                          <p-button
+                            icon="pi pi-eye"
+                            severity="secondary"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="Ver"
+                            tooltipPosition="top"
+                            (onClick)="openViewDialog(plot)"
+                          />
+                          <p-button
+                            icon="pi pi-pencil"
+                            severity="secondary"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="Atualizar"
+                            tooltipPosition="top"
+                            (onClick)="openEditDialog(plot)"
+                          />
+                          <p-button
+                            icon="pi pi-trash"
+                            severity="danger"
+                            variant="text"
+                            size="small"
+                            [rounded]="true"
+                            pTooltip="Deletar"
+                            tooltipPosition="top"
+                            (onClick)="confirmDelete(plot)"
+                          />
+                        </div>
                       </td>
                     </tr>
                   </ng-template>
@@ -311,7 +568,7 @@
 
             <p-tabpanel value="1">
               <!-- Search + Actions -->
-              <div class="flex gap-2 mb-4">
+              <div class="flex gap-2 items-center mb-4">
                 <p-iconfield class="flex-1">
                   <p-inputicon class="pi pi-search" />
                   <input
@@ -319,23 +576,18 @@
                     placeholder="Pesquisar medições..."
                     [(ngModel)]="medicaoSearch"
                     class="w-full"
-                    size="small"
                   />
                 </p-iconfield>
                 <p-button
                   label="Filtrar"
                   icon="pi pi-filter"
                   severity="secondary"
-                  variant="outlined"
-                  size="small"
                 />
                 <p-button
                   label="Ordenar"
                   icon="pi pi-sort-alt"
                   iconPos="right"
                   severity="secondary"
-                  variant="outlined"
-                  size="small"
                 />
               </div>
 
