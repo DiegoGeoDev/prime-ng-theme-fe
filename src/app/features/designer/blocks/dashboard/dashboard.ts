@@ -13,12 +13,31 @@ import { ChartModule } from 'primeng/chart';
 import { MultiSelect } from 'primeng/multiselect';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { InputText } from 'primeng/inputtext';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 export interface Column {
   field: string;
   header: string;
   sortable: boolean;
   style: string;
+}
+
+export interface MedicaoItem {
+  id: string;
+  talhao: string;
+  especie: string;
+  tipo: string;
+  status: string;
+  tempo: string;
+  icon: string;
+  iconColor: string;
+}
+
+export interface MedicaoGroup {
+  fazenda: string;
+  items: MedicaoItem[];
 }
 
 export interface ForestPlot {
@@ -63,6 +82,9 @@ interface NavItem {
     ChartModule,
     MultiSelect,
     ConfirmDialog,
+    InputText,
+    IconField,
+    InputIcon,
   ],
   providers: [ConfirmationService],
   templateUrl: './dashboard.html',
@@ -385,6 +407,38 @@ export class DashboardBlock implements OnInit {
     if (status === 'Concluído') return 'pi pi-check-circle';
     if (status === 'Em Progresso') return 'pi pi-clock';
     return 'pi pi-circle';
+  }
+
+  protected readonly medicaoGroups = signal<MedicaoGroup[]>([
+    {
+      fazenda: 'Fazenda Boa Vista',
+      items: [
+        { id: 'T-001', talhao: 'T-001', especie: 'Eucalyptus urophylla', tipo: 'Inventário', status: 'Em Progresso', tempo: '30 min atrás', icon: 'pi pi-list-check', iconColor: '#10b981' },
+        { id: 'T-002', talhao: 'T-002', especie: 'Eucalyptus grandis', tipo: 'Inventário', status: 'Concluído', tempo: '2 horas atrás', icon: 'pi pi-list-check', iconColor: '#10b981' },
+      ],
+    },
+    {
+      fazenda: 'Fazenda São João',
+      items: [
+        { id: 'T-003', talhao: 'T-003', especie: 'Pinus elliottii', tipo: 'Medição', status: 'Concluído', tempo: '1 hora atrás', icon: 'pi pi-chart-bar', iconColor: '#3b82f6' },
+        { id: 'T-004', talhao: 'T-004', especie: 'Pinus taeda', tipo: 'Medição', status: 'Em Progresso', tempo: '3 horas atrás', icon: 'pi pi-chart-bar', iconColor: '#3b82f6' },
+      ],
+    },
+    {
+      fazenda: 'Fazenda Verde',
+      items: [
+        { id: 'T-005', talhao: 'T-005', especie: 'Eucalyptus urophylla', tipo: 'Colheita', status: 'Em Progresso', tempo: '45 min atrás', icon: 'pi pi-box', iconColor: '#f59e0b' },
+        { id: 'T-006', talhao: 'T-006', especie: 'Eucalyptus saligna', tipo: 'Colheita', status: 'Concluído', tempo: '1 dia atrás', icon: 'pi pi-box', iconColor: '#f59e0b' },
+      ],
+    },
+  ]);
+
+  protected medicaoSearch = '';
+
+  protected getMedicaoStatusClass(status: string): string {
+    if (status === 'Concluído') return 'text-green-600 dark:text-green-400';
+    if (status === 'Em Progresso') return 'text-amber-500 dark:text-amber-400';
+    return 'text-muted-color';
   }
 
   protected confirmLogout(): void {

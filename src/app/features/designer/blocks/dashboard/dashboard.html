@@ -310,18 +310,92 @@
             </p-tabpanel>
 
             <p-tabpanel value="1">
-              <p class="m-0">
-                Ao contrário do que se acredita, Lorem Ipsum não é simplesmente um texto randômico.
-                Com mais de 2000 anos, suas raízes podem ser encontradas em uma obra de literatura
-                latina clássica datada de 45 AC. Richard McClintock, um professor de latim do
-                Hampden-Sydney College na Virginia, pesquisou uma das mais obscuras palavras em
-                latim, consectetur, oriunda de uma passagem de Lorem Ipsum, e, procurando por entre
-                citações da palavra na literatura clássica, descobriu a sua indubitável origem.
-                Lorem Ipsum vem das seções 1.10.32 e 1.10.33 do "de Finibus Bonorum et Malorum" (Os
-                Extremos do Bem e do Mal), de Cícero, escrito em 45 AC. Este livro é um tratado de
-                teoria da ética muito popular na época da Renascença. A primeira linha de Lorem
-                Ipsum, "Lorem Ipsum dolor sit amet..." vem de uma linha na seção 1.10.32.
-              </p>
+              <!-- Search + Actions -->
+              <div class="flex gap-2 mb-4">
+                <p-iconfield class="flex-1">
+                  <p-inputicon class="pi pi-search" />
+                  <input
+                    pInputText
+                    placeholder="Pesquisar medições..."
+                    [(ngModel)]="medicaoSearch"
+                    class="w-full"
+                    size="small"
+                  />
+                </p-iconfield>
+                <p-button
+                  label="Filtrar"
+                  icon="pi pi-filter"
+                  severity="secondary"
+                  variant="outlined"
+                  size="small"
+                />
+                <p-button
+                  label="Ordenar"
+                  icon="pi pi-sort-alt"
+                  iconPos="right"
+                  severity="secondary"
+                  variant="outlined"
+                  size="small"
+                />
+              </div>
+
+              <!-- Grouped list -->
+              @for (group of medicaoGroups(); track group.fazenda) {
+                <div class="mb-5">
+                  <!-- Group header -->
+                  <div class="flex items-center gap-2 mb-2 px-1">
+                    <i class="pi pi-map-marker text-muted-color text-xs"></i>
+                    <span class="text-sm font-semibold text-color">{{ group.fazenda }}</span>
+                  </div>
+
+                  <!-- Items -->
+                  <div class="border border-surface rounded-xl overflow-hidden">
+                    @for (item of group.items; track item.id; let last = $last) {
+                      <div
+                        class="flex items-center gap-3 px-4 py-3 bg-(--p-content-background) transition-colors"
+                        [class.border-b]="!last"
+                        [class.border-surface]="!last"
+                      >
+                        <!-- Icon box -->
+                        <div
+                          class="w-10 h-10 rounded-lg bg-surface-100 flex items-center justify-center shrink-0"
+                        >
+                          <i
+                            [class]="item.icon"
+                            [style.color]="item.iconColor"
+                            style="font-size: 1rem"
+                          ></i>
+                        </div>
+
+                        <!-- Main info -->
+                        <div class="flex-1 min-w-0">
+                          <div class="font-medium text-sm text-color">{{ item.talhao }}</div>
+                          <div class="text-xs text-muted-color mt-0.5 truncate">
+                            {{ item.especie }} · {{ item.tipo }}
+                          </div>
+                        </div>
+
+                        <!-- Status + time -->
+                        <div class="text-right shrink-0">
+                          <div class="text-sm font-semibold" [class]="getMedicaoStatusClass(item.status)">
+                            {{ item.status }}
+                          </div>
+                          <div class="text-xs text-muted-color mt-0.5">{{ item.tempo }}</div>
+                        </div>
+
+                        <!-- Menu button -->
+                        <p-button
+                          icon="pi pi-ellipsis-v"
+                          severity="secondary"
+                          variant="text"
+                          size="small"
+                          [rounded]="true"
+                        />
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
             </p-tabpanel>
 
             <p-tabpanel value="2">
