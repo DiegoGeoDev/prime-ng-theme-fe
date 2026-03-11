@@ -66,6 +66,13 @@ interface NavItem {
   active: boolean;
 }
 
+interface RecentDocument {
+  name: string;
+  ext: string;
+  icon: string;
+  size: string;
+}
+
 @Component({
   selector: 'app-dashboard-block',
   standalone: true,
@@ -100,6 +107,19 @@ export class DashboardBlock implements OnInit {
   protected readonly chartData = signal<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   protected readonly chartOptions = signal<any>(null);
+
+  protected readonly recentDocuments = signal<RecentDocument[]>([
+    { name: 'cadastro_florestal.docx', ext: 'docx', icon: 'word.svg', size: '214 KB' },
+    { name: 'inventario_especies.xlsx', ext: 'xlsx', icon: 'excel.svg', size: '87 KB' },
+    { name: 'mapa_cobertura.xlsx', ext: 'xlsx', icon: 'excel.svg', size: '341 KB' },
+    { name: 'projeto_reflorestamento.psd', ext: 'psd', icon: 'ps.svg', size: '1,2 MB' },
+    { name: 'script_analise_dap.js', ext: 'js', icon: 'code.svg', size: '18 KB' },
+    { name: 'analise_vegetacao.ai', ext: 'ai', icon: 'ai.svg', size: '526 KB' },
+    { name: 'plano_manejo_florestal.docx', ext: 'docx', icon: 'word.svg', size: '158 KB' },
+    { name: 'registro_fauna.one', ext: 'one', icon: 'one.svg', size: '73 KB' },
+    { name: 'monitoramento_flora.css', ext: 'css', icon: 'code.svg', size: '9 KB' },
+    { name: 'laudo_tecnico_talhao.docx', ext: 'docx', icon: 'word.svg', size: '302 KB' },
+  ]);
 
   ngOnInit(): void {
     this.initChart();
