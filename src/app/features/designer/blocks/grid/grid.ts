@@ -4,6 +4,7 @@ import { Button } from 'primeng/button';
 import { DesignPreview } from '../preview/preview';
 import { LoginBlock } from '../login/login';
 import { DashboardBlock } from '../dashboard/dashboard';
+import { TableBlock } from '../table/table';
 
 export interface BlockOption {
   id: string;
@@ -25,6 +26,7 @@ export class Grid {
     { id: 'preview', label: 'Preview', icon: 'pi pi-eye', component: DesignPreview },
     { id: 'login', label: 'Login', icon: 'pi pi-sign-in', component: LoginBlock },
     { id: 'dashboard', label: 'Dashboard', icon: 'pi pi-th-large', component: DashboardBlock },
+    { id: 'table', label: 'Tabela', icon: 'pi pi-table', component: TableBlock },
   ]);
 
   protected readonly selectedBlockId = signal<string>('preview');
